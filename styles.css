@@ -3,7 +3,7 @@
   --line:#22304f; --accent:#7aa2ff; --accent2:#56d3a2;
 }
 [data-theme="light"]{
-  --bg:#f6f7fb; --card:#ffffff; --text:#101828; --muted:#475467;
+  --bg:#f6f7fb; --card:#ffffff; --text:#101828; --muted:#475467; 
   --line:#e5e7eb; --accent:#2563eb; --accent2:#059669;
 }
 
@@ -148,4 +148,9 @@ dd{ margin:.25rem 0 0; color:var(--muted); }
   .grid{ grid-template-columns:1fr; }
   .menu{ display:none; }
   .menu.is-open{ display:flex; flex-direction:column; gap:.5rem; }
+}
+
+.card.is-highlighted{
+  outline: 2px solid var(--line);
+  transform: translateY(-2px);
 }
