@@ -4,6 +4,24 @@
 const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
+const buildcard = ({title, text, tags}) => {
+    const article = document.createElement('article');
+    article.className = 'card';
+    article.dataset.tags = tags;
+    article.innerHTML = `
+            <h3 class="card-title"></h3>
+            <p class="card-text"></p>
+            <div class="card-actions">
+              <button class="btn small" type="button" data-action="like">👍 laik</button>
+              <button class="btn small ghost" type="button" data-action="remove"> delete</button>
+              <span class="badge" aria-label="likes">0</span>
+            </div>
+    `;
+    article.querySelector('.card-title').textContent = title;
+    article.querySelector('.card-text').textContent = text;
+    return article;
+};
+
 const estadoUI = $('#estadoUI');
 const setEstado = (msg) => { estadoUI.textContent = msg; };
 setEstado('Tlaxcala');
@@ -49,18 +67,11 @@ const btnAgregarCard = $('#btnAgregarCard');
 const listaArticulos2 = $('#listaArticulos');
 
 btnAgregarCard.addEventListener('click', () => {
-    const new_article = document.createElement('article');
-    new_article.className = 'card';
-    new_article.dataset.tags = 'agentes';
-    new_article.innerHTML = `
-            <h3 class="card-title">ay si me gustas dani</h3>
-            <p class="card-text">asdfghjklñ.qwertyuiop,zxcvbnm</p>
-            <div class="card-actions">
-              <button class="btn small" type="button" data-action="like">👍 laik</button>
-              <button class="btn small ghost" type="button" data-action="remove"> delete</button>
-              <span class="badge" aria-label="likes">0</span>
-            </div>
-    `;
+    const new_article = buildcard({
+        title: 'ay si dani me gugutata',
+        text: 'oye no nada',
+        tags: 'new'
+    });
     listaArticulos2.append(new_article);
     setEstado('Se agregó una nueva card');
 });
