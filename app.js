@@ -26,7 +26,7 @@ btnCambiarMensaje.addEventListener('click', () => {
         : 'Manipular el DOMinico';
     
     titulo.dataset.alt = alt ? '0' : '1';   
-    setEstado('Se changue el testo');
+    setEstado('Liquido');
 
 }); 
 
@@ -63,4 +63,17 @@ btnAgregarCard.addEventListener('click', () => {
     `;
     listaArticulos2.append(new_article);
     setEstado('Se agregó una nueva card');
+});
+
+//eliminar elementos del DOM (agregados)
+const btnEliminarCard = $('#btnLimpiar');
+btnEliminarCard.addEventListener('click', () => {
+    const cards = $$('#listaArticulos .card');
+    let removed = 0;
+    cards.forEach(card => {
+        if(card.dataset.seed == 'true') return;
+        card.remove();
+        removed++;
+    });
+    setEstado('Articulos eliminados '+removed);
 });
