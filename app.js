@@ -86,5 +86,22 @@ btnEliminarCard.addEventListener('click', () => {
         card.remove();
         removed++;
     });
-    setEstado('Articulos eliminados '+removed);
+    setEstado('Articulos eliminados '+ removed);
 });
+
+//manejador para los botones like
+// const listaArticulos3 = $$('#listaArticulos button[data-action="like"]');
+const likeButtons = document.querySelectorAll('#listaArticulos button[data-action="like"]');
+likeButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const card = btn.closest('.card');
+        hacerLike(card);
+    });
+});
+
+const hacerLike = (card) => {
+        const bagde = card.querySelector('.badge');
+        const currentLikes = Number(bagde.textContent) || 0;
+        bagde.textContent = currentLikes + 1;
+        setEstado('Likes más uno');
+};
