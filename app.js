@@ -90,13 +90,24 @@ btnEliminarCard.addEventListener('click', () => {
 });
 
 //manejador para los botones like
-// const listaArticulos3 = $$('#listaArticulos button[data-action="like"]');
-const likeButtons = document.querySelectorAll('#listaArticulos button[data-action="like"]');
-likeButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-        const card = btn.closest('.card');
-        hacerLike(card);
-    });
+// const likeButtons = document.querySelectorAll('#listaArticulos button[data-action="like"]');
+// likeButtons.forEach(btn => {
+//     btn.addEventListener('click', () => {
+//         const card = btn.closest('.card');
+//         hacerLike(card);
+//     });
+// });
+
+//Delegacion de eventos para hacer like
+const listaArticulos3 = $('#listaArticulos');
+listaArticulos3.addEventListener('click', (e) => {
+    // Se hizo click en un boton de like?
+    const btn = e.target.closest('button[data-action="like"]');
+    if (!btn) return; // Si no, salir
+    const card = btn.closest('.card');
+
+    if(!card) return; // Si no se encuentra la card, salir
+    hacerLike(card);
 });
 
 const hacerLike = (card) => {
