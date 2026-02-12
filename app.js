@@ -101,18 +101,31 @@ btnEliminarCard.addEventListener('click', () => {
 //Delegacion de eventos para hacer like
 const listaArticulos3 = $('#listaArticulos');
 listaArticulos3.addEventListener('click', (e) => {
-    // Se hizo click en un boton de like?
-    const btn = e.target.closest('button[data-action="like"]');
+    // Se hizo click en un boton?
+    const btn = e.target.closest('button[data-action]');
     if (!btn) return; // Si no, salir
     const card = btn.closest('.card');
 
     if(!card) return; // Si no se encuentra la card, salir
-    hacerLike(card);
+    const action = btn.dataset.action;
+
+    if (action === 'like') doLike(card);
+    if (action === 'remove') doRemove(card);
+    
 });
 
-const hacerLike = (card) => {
+const doLike = (card) => {
         const bagde = card.querySelector('.badge');
         const currentLikes = Number(bagde.textContent) || 0;
         bagde.textContent = currentLikes + 1;
         setEstado('Likes más uno');
+    };
+    
+const doRemove = (card) => {
+    const bagde = card.querySelector('.badge');
+    const currentLikes = Number(bagde.textContent) || 0;
+    currentLikes > 0 
+        ? bagde.textContent = currentLikes - 1
+        : bagde.textContent = 0;
+    setEstado('Likes menos uno');
 };
