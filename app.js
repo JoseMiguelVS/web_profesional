@@ -99,13 +99,13 @@ btnEliminarCard.addEventListener('click', () => {
 // });
 
 //Delegacion de eventos para hacer like
+//document → html → body → main → #listaArticulos → article.card → card-action(div) → button[data-actions] ← eventos
 const listaArticulos3 = $('#listaArticulos');
 listaArticulos3.addEventListener('click', (e) => {
     // Se hizo click en un boton?
     const btn = e.target.closest('button[data-action]');
     if (!btn) return; // Si no, salir
     const card = btn.closest('.card');
-
     if(!card) return; // Si no se encuentra la card, salir
     const action = btn.dataset.action;
 
@@ -129,3 +129,23 @@ const doRemove = (card) => {
         : bagde.textContent = 0;
     setEstado('Likes menos uno');
 };
+
+const filtro = $('#filtro');
+const matchText = (card, q) => {
+    const title = card.querySelector('.card-title')?.textContent ?? '';
+    const text = card.querySelector('.card-text')?.textContent ?? '';
+    const haystack = (title + ' ' + text).toLowerCase();
+    return haystack.includes(q);
+};
+
+filtro.addEventListener('input', () => {
+    const q = filtro.value.trim().toLowerCase();
+    const cards = $$('#listaArticulos .card');
+
+    cards.forEach(( card ) => {
+        const ok = q === '' ? true : matchText(card, q);
+        card.hidden = !ok;
+    });
+
+    setEstado(q === '' ? 'Filtro vacio' : `Filtro texto: "${q}" `); 
+});
