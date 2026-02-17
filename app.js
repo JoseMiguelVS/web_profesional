@@ -89,15 +89,6 @@ btnEliminarCard.addEventListener('click', () => {
     setEstado('Articulos eliminados '+ removed);
 });
 
-//manejador para los botones like
-// const likeButtons = document.querySelectorAll('#listaArticulos button[data-action="like"]');
-// likeButtons.forEach(btn => {
-//     btn.addEventListener('click', () => {
-//         const card = btn.closest('.card');
-//         hacerLike(card);
-//     });
-// });
-
 //Delegacion de eventos para hacer like
 //document → html → body → main → #listaArticulos → article.card → card-action(div) → button[data-actions] ← eventos
 const listaArticulos3 = $('#listaArticulos');
@@ -148,4 +139,19 @@ filtro.addEventListener('input', () => {
     });
 
     setEstado(q === '' ? 'Filtro vacio' : `Filtro texto: "${q}" `); 
+});
+
+const chips = $('#chips');
+chips.addEventListener('click', (e) => {
+    const chip = e.target.closest('.chip');
+    if (!chip) return;
+
+    const tag = (chip.dataset.tag || '').toLowerCase();
+    const cards = $$('#listaArticulos .card');
+
+    cards.forEach(( card ) => {
+        const tags = (card.dataset.tags || '').toLowerCase();
+        card.hidden = !tags.includes(tag);
+    });
+    setEstado(`Filtro tags: "${tag}" `);
 });
