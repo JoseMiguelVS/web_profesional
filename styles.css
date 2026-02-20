@@ -426,3 +426,7 @@ dd {
 [hidden] {
   display: none !important;
 }
+
+.input.is-invalid{
+  outline: 2px solid var(--accent2);
+}

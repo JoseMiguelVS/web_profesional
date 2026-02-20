@@ -192,3 +192,51 @@ const applyFilters = () => {
         ? `Filtros: ${parts.join(' + ')}` 
         : 'Sin filtros');
 };
+
+const form = $('#formNewsletter');
+const email = $('#email');
+const interes = $('#interes');
+const feedback = $('#feedback');
+
+// Validar el email con una expresión regular simple
+const isValidEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);  //regex == regular expression == expresión regular
+
+//Inicio del texto /^
+//[^\s@]+ → Uno o más caracteres que no sean espacios ni '@'
+//@ → El símbolo '@' literal
+//[^\s@]+ → Uno o más caracteres que no sean espacios ni '@' (dominio)
+//\. → Un punto literal (se escapa con '\')
+//[^\s@]+ → Uno o más caracteres que no sean espacios ni '@' (extensión)
+//$/ → Fin del texto la expresión regular
+form.addEventListener('submit', (e) => {
+    e.preventDefault(); // Evitar el envío del formulario
+    const valueEmail = email.value.trim();
+    const valueInteres = interes.value.trim();
+
+    email.classList.remove('is-invalid');
+    interes.classList.remove('is-invalid');
+    feedback.textContent = '';
+
+    let ok = true;
+
+    if(!isValidEmail(valueEmail)) {
+        email.classList.add('is-invalid');
+        feedback.textContent = 'Por favor, ingresa un correo electrónico válido.';
+        ok = false;
+    }
+    if(valueInteres === '') {
+        interes.classList.add('is-invalid');
+        feedback.textContent = 'Por favor, selecciona un área de interés.';
+        ok = false;
+    }
+    if (!ok){
+        feedback.textContent = 'rreviza los campos marcados';
+        setEstado('Error en el formulario');
+        return;
+    }
+
+    //simular envio d datos
+    feedback.textContent = `Gracias por suscribirte con el correo ${valueEmail} y tu interés en ${valueInteres}.`;
+    setEstado('Enviando formulario');
+    form.reset();
+});
