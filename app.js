@@ -208,6 +208,7 @@ const isValidEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);  //reg
 //\. → Un punto literal (se escapa con '\')
 //[^\s@]+ → Uno o más caracteres que no sean espacios ni '@' (extensión)
 //$/ → Fin del texto la expresión regular
+
 form.addEventListener('submit', (e) => {
     e.preventDefault(); // Evitar el envío del formulario
     const valueEmail = email.value.trim();
@@ -240,3 +241,41 @@ form.addEventListener('submit', (e) => {
     setEstado('Enviando formulario');
     form.reset();
 });
+
+// Carga asíncrona de noticias (simulada)
+const listaNoticias = $('#listaNoticias');
+const renderNoticias = (items) => {
+    listaNoticias.innerHTML = '';
+
+    if (!items || items.length === 0) {
+        const li = document.createElement('li');
+        li.textContent = 'without noticias disponibles.';
+        listaNoticias.append(li);
+        return;
+    }
+    items.forEach((t) => {
+        const li = document.createElement('li');
+        li.textContent = t;
+        listaNoticias.append(li);
+    });
+};
+
+// Simular servicio de fetch
+const fakeFetchNoticias = () => {
+    return new Promise((resolve, reject) => {
+        const shouldFail = Math.random() < 0.2; // 20% de probabilidad de fallo
+        setTimeout(() => {
+            if (shouldFail){
+                reject(new Error('Simulación de fallo en la carga de noticias'));
+                return;
+            }
+            resolve([
+                'Nueva actualización de React 18',
+                'JavaScript Frameworks: Tendencias 2024',
+                'CSS Grid vs Flexbox: Guía Comparativa',
+                'Node.js Performance Tips',
+                'Web Accessibility Best Practices'
+            ]);
+        }, 1500);
+    });
+};
