@@ -276,6 +276,24 @@ const fakeFetchNoticias = () => {
                 'Node.js Performance Tips',
                 'Web Accessibility Best Practices'
             ]);
+            //resolve([]); // Simular respuesta sin noticias
         }, 1500);
     });
 };
+
+//asignacion del evento al boton de cargar noticias
+const btnCargar = $('#btnCargar');
+btnCargar.addEventListener('click', async () => {
+    btnCargar.disabled = true;
+    setEstado('Cargando noticias...');
+    try{
+        const items = await fakeFetchNoticias();
+        renderNoticias(items);
+        setEstado('Noticias cargadas');
+    } catch (error) {
+        renderNoticias([`Error: ${error.message}`]);
+        setEstado('Error al cargar noticias');
+    } finally {
+        btnCargar.disabled = false;
+    }
+});
