@@ -4,7 +4,7 @@
 const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
-const buildcard = ({title, text, tags}) => {
+const buildcard = ({ title, text, tags }) => {
     const article = document.createElement('article');
     article.className = 'card';
     article.dataset.tags = tags;
@@ -25,7 +25,7 @@ const buildcard = ({title, text, tags}) => {
 const estadoUI = $('#estadoUI');
 const setEstado = (msg) => { estadoUI.textContent = msg; };
 setEstado('Tlaxcala');
- 
+
 // Referecias a elementos del DOM
 const btnCambiarMensaje = $('#btnCambiarMensaje');
 const titulo = $('#tituloPrincipal');
@@ -42,11 +42,11 @@ btnCambiarMensaje.addEventListener('click', () => {
     subtitulo.textContent = alt
         ? 'No aprendas conceptos clave'
         : 'Manipular el DOMinico';
-    
-    titulo.dataset.alt = alt ? '0' : '1';   
+
+    titulo.dataset.alt = alt ? '0' : '1';
     setEstado('Liquido');
 
-}); 
+});
 
 const listaArticulos = $('#listaArticulos');
 
@@ -82,11 +82,11 @@ btnEliminarCard.addEventListener('click', () => {
     const cards = $$('#listaArticulos .card');
     let removed = 0;
     cards.forEach(card => {
-        if(card.dataset.seed === 'true') return;
+        if (card.dataset.seed === 'true') return;
         card.remove();
         removed++;
     });
-    setEstado('Articulos eliminados '+ removed);
+    setEstado('Articulos eliminados ' + removed);
 });
 
 //Delegacion de eventos para hacer like
@@ -97,25 +97,25 @@ listaArticulos3.addEventListener('click', (e) => {
     const btn = e.target.closest('button[data-action]');
     if (!btn) return; // Si no, salir
     const card = btn.closest('.card');
-    if(!card) return; // Si no se encuentra la card, salir
+    if (!card) return; // Si no se encuentra la card, salir
     const action = btn.dataset.action;
 
     if (action === 'like') doLike(card);
     if (action === 'remove') doRemove(card);
-    
+
 });
 
 const doLike = (card) => {
-        const bagde = card.querySelector('.badge');
-        const currentLikes = Number(bagde.textContent) || 0;
-        bagde.textContent = currentLikes + 1;
-        setEstado('Likes más uno');
-    };
-    
+    const bagde = card.querySelector('.badge');
+    const currentLikes = Number(bagde.textContent) || 0;
+    bagde.textContent = currentLikes + 1;
+    setEstado('Likes más uno');
+};
+
 const doRemove = (card) => {
     const bagde = card.querySelector('.badge');
     const currentLikes = Number(bagde.textContent) || 0;
-    currentLikes > 0 
+    currentLikes > 0
         ? bagde.textContent = currentLikes - 1
         : bagde.textContent = 0;
     setEstado('Likes menos uno');
@@ -165,7 +165,7 @@ chips.addEventListener('click', (e) => {
 });
 
 const filterState = {
-      q: '',
+    q: '',
     tag: '',
 };
 
@@ -177,19 +177,19 @@ const matchTag = (card, tag) => {
 
 const applyFilters = () => {
     const cards = $$('#listaArticulos .card');
-    cards.forEach(( card ) => {
-        const okText = filterState.q 
-        ? matchText(card, filterState.q) 
-        : true;
-    const okTag = matchTag(card, filterState.tag);
-    card.hidden = !(okText && okTag);
+    cards.forEach((card) => {
+        const okText = filterState.q
+            ? matchText(card, filterState.q)
+            : true;
+        const okTag = matchTag(card, filterState.tag);
+        card.hidden = !(okText && okTag);
     });
 
     const parts = [];
     if (filterState.q) parts.push(`Texto: "${filterState.q}"`);
     if (filterState.tag) parts.push(`Tag: "${filterState.tag}"`);
-    setEstado(parts.length > 0 
-        ? `Filtros: ${parts.join(' + ')}` 
+    setEstado(parts.length > 0
+        ? `Filtros: ${parts.join(' + ')}`
         : 'Sin filtros');
 };
 
@@ -220,17 +220,17 @@ form.addEventListener('submit', (e) => {
 
     let ok = true;
 
-    if(!isValidEmail(valueEmail)) {
+    if (!isValidEmail(valueEmail)) {
         email.classList.add('is-invalid');
         feedback.textContent = 'Por favor, ingresa un correo electrónico válido.';
         ok = false;
     }
-    if(valueInteres === '') {
+    if (valueInteres === '') {
         interes.classList.add('is-invalid');
         feedback.textContent = 'Por favor, selecciona un área de interés.';
         ok = false;
     }
-    if (!ok){
+    if (!ok) {
         feedback.textContent = 'rreviza los campos marcados';
         setEstado('Error en el formulario');
         return;
@@ -260,22 +260,36 @@ const renderNoticias = (items) => {
     });
 };
 
+//simular notificas random
+const noticiasRandom = () => {
+    const numNoticias = Math.floor(Math.random() * 5); // Entre 0 y 4 noticias
+    switch (numNoticias) {
+        case 0:
+            return ['No hay noticias disponibles en este momento.'];
+        case 1:
+            return ['Dani esta pelon'];
+        case 2:
+            return ['Voy a reprobar mate ayuda'];
+        case 3:
+            return ['Quiero a mi novia 123'];
+        case 4:
+            return ['Noticia 1',];
+        default:
+            break;
+    }
+}
+
 // Simular servicio de fetch
 const fakeFetchNoticias = () => {
     return new Promise((resolve, reject) => {
         const shouldFail = Math.random() < 0.2; // 20% de probabilidad de fallo
+        const numNoticias = Math.floor(Math.random() * 5); // Entre 0 y 4 noticias
         setTimeout(() => {
-            if (shouldFail){
+            if (shouldFail) {
                 reject(new Error('Simulación de fallo en la carga de noticias'));
                 return;
             }
-            resolve([
-                'Nueva actualización de React 18',
-                'JavaScript Frameworks: Tendencias 2024',
-                'CSS Grid vs Flexbox: Guía Comparativa',
-                'Node.js Performance Tips',
-                'Web Accessibility Best Practices'
-            ]);
+            resolve(noticiasRandom());
             //resolve([]); // Simular respuesta sin noticias
         }, 1500);
     });
@@ -286,7 +300,7 @@ const btnCargar = $('#btnCargar');
 btnCargar.addEventListener('click', async () => {
     btnCargar.disabled = true;
     setEstado('Cargando noticias...');
-    try{
+    try {
         const items = await fakeFetchNoticias();
         renderNoticias(items);
         setEstado('Noticias cargadas');
